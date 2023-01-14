@@ -24,21 +24,6 @@ trait AutosavesRelations {
         return in_array($name, static::getAutosavedRelations());
     }
 
-    protected static function addAutosavedRelation($names) {
-        $autosavedRelations = Arr::get(static::$autosavedRelations, static::class , []);
-
-        foreach ((array)$names as $name) {
-            if (!method_exists(static::class, $name)) {
-                throw new RuntimeException('Relation ' . $name . ' does not exist on ' . static::class);
-            }
-
-            $opts = [];
-            $autosavedRelations[$name] = $opts;
-        }
-
-        static::$autosavedRelations[static::class] = $autosavedRelations;
-    }
-
     public function isMarkedForDestruction() {
         return $this->markedForDestruction;
     }
@@ -57,29 +42,19 @@ trait AutosavesRelations {
         return parent::refresh();
     }
 
-    protected function phaseForAutosavedRelation($name) {
-        if (!method_exists($this, $name)) {
-            throw new RuntimeException('Unknown relation ' . $name . ' on ' . get_class($this));
+    protected static function addAutosavedRelation($names) {
+        $autosavedRelations = Arr::get(static::$autosavedRelations, static::class , []);
+
+        foreach ((array)$names as $name) {
+            if (!method_exists(static::class, $name)) {
+                throw new RuntimeException('Relation ' . $name . ' does not exist on ' . static::class);
+            }
+
+            $opts = [];
+            $autosavedRelations[$name] = $opts;
         }
 
-        $order = 'post';
-
-        $relationType = class_basename($this->{$name}());
-
-        switch ($relationType) {
-            case 'BelongsTo':
-            case 'MorphTo':
-                $order = 'pre';
-                break;
-            case 'HasOne':
-            case 'HasMany':
-            case 'MorphOne':
-                break;
-            default:
-                throw new RuntimeException("Autosave for $relationType relations not supported.");
-        }
-
-        return $order;
+        static::$autosavedRelations[static::class] = $autosavedRelations;
     }
 
     protected function getAutosaveOptionsFor($relationName) {
@@ -111,6 +86,31 @@ trait AutosavesRelations {
         }
 
         return $ret;
+    }
+
+    protected function phaseForAutosavedRelation($name) {
+        if (!method_exists($this, $name)) {
+            throw new RuntimeException('Unknown relation ' . $name . ' on ' . get_class($this));
+        }
+
+        $order = 'post';
+
+        $relationType = class_basename($this->{$name}());
+
+        switch ($relationType) {
+            case 'BelongsTo':
+            case 'MorphTo':
+                $order = 'pre';
+                break;
+            case 'HasOne':
+            case 'HasMany':
+            case 'MorphOne':
+                break;
+            default:
+                throw new RuntimeException("Autosave for $relationType relations not supported.");
+        }
+
+        return $order;
     }
 
     protected function pushAutosavedModels($models, $relationName, $options) {
@@ -201,6 +201,33 @@ trait AutosavesRelations {
         }
     }
 
+    protected function rollbackAutosavedModels($models, $relationName) {
+        foreach (array_filter($models ?: []) as $model) {
+            if ($model->isMarkedForDestruction() && $model->id) {
+                $model->exists = true;
+            } else {
+                $model->processRollback();
+            }
+        }
+    }
+
+    protected function rollbackSelfAndAutosavedRelations() {
+        $this->rollbackSelf();
+        // $relationsToRollback = $this->loadedAutosavedRelations();
+
+        // foreach ($relationsToRollback as $relationName => $value) {
+        //     $models = ($value instanceof Collection)
+        //         ? $value->all()
+        //         : ($value instanceof Model ? [$value] : $value);
+
+        //     $this->rollbackAutosavedModels($models, $relationName);
+        // }
+    }
+
+    protected function saveSelf($options) {
+        return parent::save();
+    }
+
     protected function validateAutosavedModels($models, $relationName) {
         $relationType = class_basename($this->{$relationName}());
 
@@ -217,21 +244,6 @@ trait AutosavesRelations {
                 }
             }
         }
-    }
-
-    protected function validationRulesToIgnoreForParentRelations() {
-        $ignore = [];
-        $relationsToAutosave = $this->loadedAutosavedRelationsByOrder();
-
-        foreach ($relationsToAutosave['pre'] as $relationName => $value) {
-            $relation = $this->{$relationName}();
-            // old Laravel needs getForeignKey()
-            $ignore[] = method_exists($relation, 'getForeignKeyName')
-                ? $relation->getForeignKeyName()
-                : $relation->getForeignKey();
-        }
-
-        return $ignore;
     }
 
     protected function validationRulesToIgnore($model, $relationName) {
@@ -267,30 +279,18 @@ trait AutosavesRelations {
         return $ignored;
     }
 
-    protected function rollbackAutosavedModels($models, $relationName) {
-        foreach (array_filter($models ?: []) as $model) {
-            if ($model->isMarkedForDestruction() && $model->id) {
-                $model->exists = true;
-            } else {
-                $model->processRollback();
-            }
+    protected function validationRulesToIgnoreForParentRelations() {
+        $ignore = [];
+        $relationsToAutosave = $this->loadedAutosavedRelationsByOrder();
+
+        foreach ($relationsToAutosave['pre'] as $relationName => $value) {
+            $relation = $this->{$relationName}();
+            // old Laravel needs getForeignKey()
+            $ignore[] = method_exists($relation, 'getForeignKeyName')
+                ? $relation->getForeignKeyName()
+                : $relation->getForeignKey();
         }
-    }
 
-    protected function rollbackSelfAndAutosavedRelations() {
-        $this->rollbackSelf();
-        // $relationsToRollback = $this->loadedAutosavedRelations();
-
-        // foreach ($relationsToRollback as $relationName => $value) {
-        //     $models = ($value instanceof Collection)
-        //         ? $value->all()
-        //         : ($value instanceof Model ? [$value] : $value);
-
-        //     $this->rollbackAutosavedModels($models, $relationName);
-        // }
-    }
-
-    protected function saveSelf($options) {
-        return parent::save();
+        return $ignore;
     }
 }

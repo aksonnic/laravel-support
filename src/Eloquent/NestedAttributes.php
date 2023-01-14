@@ -167,10 +167,6 @@ trait NestedAttributes {
         }
     }
 
-    protected static function bootNestedAttributes() {
-        static::addAutosavedRelation(static::getNestedAttributes());
-    }
-
     protected function getOptionsForNestedAttributes($name) {
         return static::$acceptsNestedAttributesFor[static::class][$name];
     }
