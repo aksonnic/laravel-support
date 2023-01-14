@@ -13,18 +13,30 @@ use RuntimeException;
 
 trait AutosavesRelations {
 
-    protected $autosavedRelations = [];
+    protected static $autosavedRelations = [];
     protected $markedForDestruction = false;
 
-    public function addAutosavedRelation($names) {
-        foreach ((array)$names as $name) {
-            $opts = [];
-            $this->autosavedRelations[$name] = $opts;
-        }
+    public static function getAutosavedRelations() {
+        return array_keys(Arr::get(static::$autosavedRelations, static::class , []));
     }
 
     public function isAutosaveRelation($name) {
-        return in_array($name, array_keys($this->autosavedRelations));
+        return in_array($name, static::getAutosavedRelations());
+    }
+
+    protected static function addAutosavedRelation($names) {
+        $autosavedRelations = Arr::get(static::$autosavedRelations, static::class , []);
+
+        foreach ((array)$names as $name) {
+            if (!method_exists(static::class, $name)) {
+                throw new RuntimeException('Relation ' . $name . ' does not exist on ' . static::class);
+            }
+
+            $opts = [];
+            $autosavedRelations[$name] = $opts;
+        }
+
+        static::$autosavedRelations[static::class] = $autosavedRelations;
     }
 
     public function isMarkedForDestruction() {
@@ -71,7 +83,7 @@ trait AutosavesRelations {
     }
 
     protected function getAutosaveOptionsFor($relationName) {
-        return Arr::get($this->autosavedRelations, $relationName, []);
+        return static::$autosavedRelations[static::class][$relationName];
     }
 
     protected function getInverseRelationNameFor($relationName) {

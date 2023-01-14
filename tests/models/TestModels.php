@@ -27,10 +27,14 @@ class Company extends Model {
         return $this->hasOne(Account::class);
     }
 
+    protected static function bootTraits() {
+        parent::bootTraits();
+
+        static::addAutosavedRelation('account');
+    }
+
     protected function initializeTraits() {
         parent::initializeTraits();
-
-        $this->addAutosavedRelation('account');
 
         $this->addValidationRules('name', ['required']);
     }
@@ -70,21 +74,16 @@ class Eye extends Model {
         });
 
         parent::bootTraits();
+        static::addNestedAttribute('iris', ['allow_destroy' => true]);
+        static::addNestedAttribute('permanent_iris', ['allow_destroy' => false]);
+        static::addNestedAttribute('update_only_iris', ['update_only' => true]);
+        static::addNestedAttribute('update_and_destroy_iris', ['update_only' => true, 'allow_destroy' => true]);
 
         Eye::created(function($eye) {
             $eye->createdFlagStack[] = $eye->iris
                 ? !$eye->iris->exists
                 : 'UNSET';
         });
-    }
-
-    protected function initializeTraits() {
-        parent::initializeTraits();
-
-        $this->addAcceptedNestedAttribute('iris', ['allow_destroy' => true]);
-        $this->addAcceptedNestedAttribute('permanent_iris', ['allow_destroy' => false]);
-        $this->addAcceptedNestedAttribute('update_only_iris', ['update_only' => true]);
-        $this->addAcceptedNestedAttribute('update_and_destroy_iris', ['update_only' => true, 'allow_destroy' => true]);
     }
 }
 
@@ -115,13 +114,13 @@ class Retina extends Model {
         return $this->belongsTo(Eye::class, 'eye_id');
     }
 
-    protected function initializeTraits() {
-        parent::initializeTraits();
+    protected static function bootTraits() {
+        parent::bootTraits();
 
-        $this->addAcceptedNestedAttribute('eye', ['allow_destroy' => true]);
-        $this->addAcceptedNestedAttribute('permanent_eye', ['allow_destroy' => false]);
-        $this->addAcceptedNestedAttribute('update_only_eye', ['update_only' => true]);
-        $this->addAcceptedNestedAttribute('update_and_destroy_eye', ['allow_destroy' => true, 'update_only' => true]);
+        static::addNestedAttribute('eye', ['allow_destroy' => true]);
+        static::addNestedAttribute('permanent_eye', ['allow_destroy' => false]);
+        static::addNestedAttribute('update_only_eye', ['update_only' => true]);
+        static::addNestedAttribute('update_and_destroy_eye', ['allow_destroy' => true, 'update_only' => true]);
     }
 }
 
@@ -148,11 +147,11 @@ class Order extends Model {
         return $this->belongsTo(Customer::class, 'billing_customer_id');
     }
 
-    protected function initializeTraits() {
-        parent::initializeTraits();
+    protected static function bootTraits() {
+        parent::bootTraits();
 
-        $this->addAutosavedRelation(['billing', 'shipping']);
-        $this->addAcceptedNestedAttribute(['nested_billing']);
+        static::addAutosavedRelation(['billing', 'shipping']);
+        static::addNestedAttribute(['nested_billing']);
     }
 }
 
@@ -175,10 +174,10 @@ class Tagging extends Model {
         return $this->morphTo();
     }
 
-    protected function initializeTraits() {
-        parent::initializeTraits();
+    protected static function bootTraits() {
+        parent::bootTraits();
 
-        $this->addAutosavedRelation('taggable');
+        static::addAutosavedRelation('taggable');
     }
 }
 
@@ -196,9 +195,9 @@ class Guitar extends Model {
 
 class InvalidNestedAttrModel extends Model {
 
-    protected function initializeTraits() {
-        parent::initializeTraits();
+    protected static function bootTraits() {
+        parent::bootTraits();
 
-        $this->addAcceptedNestedAttribute('unknown');
+        static::addNestedAttribute('unknown');
     }
 }

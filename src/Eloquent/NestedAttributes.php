@@ -7,14 +7,14 @@ use RuntimeException;
 
 trait NestedAttributes {
 
-    protected $acceptsNestedAttributesFor = [];
+    protected static $acceptsNestedAttributesFor = [];
 
-    public function getNestedAttributes() {
-        return array_keys($this->acceptsNestedAttributesFor);
+    public static function getNestedAttributes() {
+        return array_keys(Arr::get(static::$acceptsNestedAttributesFor, static::class , []));
     }
 
     public function isNestedAttribute($name) {
-        return in_array($name, $this->getNestedAttributes());
+        return in_array($name, static::getNestedAttributes());
     }
 
     public function setAttribute($key, $value) {
@@ -28,15 +28,19 @@ trait NestedAttributes {
         return parent::setAttribute($key, $value);
     }
 
-    protected function addAcceptedNestedAttribute($names, $opts = []) {
+    protected static function addNestedAttribute($names, $opts = []) {
+        $nestedAttributes = Arr::get(static::$acceptsNestedAttributesFor, static::class , []);
+
         foreach ((array)$names as $name) {
-            if (!method_exists($this, $name)) {
-                throw new RuntimeException('Relation ' . $name . ' does not exist on ' . get_class($this));
+            if (!method_exists(static::class, $name)) {
+                throw new RuntimeException('Relation ' . $name . ' does not exist on ' . static::class);
             }
 
-            $this->acceptsNestedAttributesFor[$name] = Arr::only($opts, ['update_only', 'allow_destroy', 'reject_if']);
-            $this->addAutosavedRelation($name);
+            $nestedAttributes[$name] = Arr::only($opts, ['update_only', 'allow_destroy', 'reject_if']);
+            static::addAutosavedRelation($name);
         }
+
+        static::$acceptsNestedAttributesFor[static::class] = $nestedAttributes;
     }
 
     protected function assignNestedAttributes($relationName, $attrs) {
@@ -63,7 +67,7 @@ trait NestedAttributes {
     protected function assignNestedAttributesForOneToOne($relationName, $attrs) {
         $existingRecord = $this->{$relationName};
         $relation = $this->{$relationName}();
-        $options = $this->acceptsNestedAttributesFor[$relationName];
+        $options = $this->getOptionsForNestedAttributes($relationName);
 
         if (
             (Arr::get($options, 'update_only') || Arr::get($attrs, 'id'))
@@ -90,7 +94,7 @@ trait NestedAttributes {
     protected function assignNestedAttributesForBelongsTo($relationName, $attrs) {
         $existingRecord = $this->{$relationName};
         $relation = $this->{$relationName}();
-        $options = $this->acceptsNestedAttributesFor[$relationName];
+        $options = $this->getOptionsForNestedAttributes($relationName);
 
         if (
             (Arr::get($options, 'update_only') || Arr::get($attrs, 'id'))
@@ -120,7 +124,7 @@ trait NestedAttributes {
 
     protected function assignNestedAttributesForOneToMany($relationName, $attrsArray) {
         $relation = $this->{$relationName}();
-        $options = $this->acceptsNestedAttributesFor[$relationName];
+        $options = $this->getOptionsForNestedAttributes($relationName);
 
         if ($this->relationLoaded($relationName)) {
             $existingRecords = $this->{$relationName}->all();
@@ -163,8 +167,12 @@ trait NestedAttributes {
         }
     }
 
-    protected function initializeAcceptsNestedAttributes() {
-        $this->addAutosavedRelation($this->getNestedAttributes());
+    protected static function bootNestedAttributes() {
+        static::addAutosavedRelation(static::getNestedAttributes());
+    }
+
+    protected function getOptionsForNestedAttributes($name) {
+        return static::$acceptsNestedAttributesFor[static::class][$name];
     }
 
     protected function getUnassignableKeys($model = null) {
