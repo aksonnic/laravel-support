@@ -1,0 +1,19 @@
+{
+    "name": "silvertipsoftware/laravel-support",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "SilvertipSoftware\\LaravelSupport\\": "src"
+        }
+    },
+    "require-dev": {
+        "orchestra/testbench": "3.4",
+        "phpunit/phpunit": "~5.7",
+        "phpcompatibility/php-compatibility": "9.2.0"
+    },
+    "scripts": {
+        "cscompat-config": "phpcs --config-set installed_paths vendor/phpcompatibility/php-compatibility",
+        "cscompat56": "phpcs --standard=PHPCompatibility --colors -v --runtime-set testVersion 5.6- src tests"
+    }
+}
