@@ -75,7 +75,7 @@ class Eye extends Model {
     }
 
     protected static function bootTraits() {
-        Eye::created(function($eye) {
+        Eye::created(function ($eye) {
             $eye->createdFlagStack[] = $eye->iris
                 ? !$eye->iris->exists
                 : 'UNSET';
@@ -88,7 +88,7 @@ class Eye extends Model {
         static::addNestedAttribute('update_and_destroy_iris', ['update_only' => true, 'allow_destroy' => true]);
         static::addNestedAttribute('cones', ['allow_destroy' => true]);
 
-        Eye::created(function($eye) {
+        Eye::created(function ($eye) {
             $eye->createdFlagStack[] = $eye->iris
                 ? !$eye->iris->exists
                 : 'UNSET';

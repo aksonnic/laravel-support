@@ -11,8 +11,13 @@ class ModelValidator extends Validator {
     protected $model;
     protected $usesHumanizer;
 
-    public function __construct($model, Translator $translator, array $data, array $rules,
-        array $messages = [], array $customAttributes = []
+    public function __construct(
+        $model,
+        Translator $translator,
+        array $data,
+        array $rules,
+        array $messages = [],
+        array $customAttributes = []
     ) {
         parent::__construct($translator, $data, $rules, $messages, $customAttributes);
 

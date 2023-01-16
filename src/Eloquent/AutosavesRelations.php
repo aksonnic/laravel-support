@@ -17,7 +17,7 @@ trait AutosavesRelations {
     protected $markedForDestruction = false;
 
     public static function getAutosavedRelations() {
-        return array_keys(Arr::get(static::$autosavedRelations, static::class , []));
+        return array_keys(Arr::get(static::$autosavedRelations, static::class, []));
     }
 
     public function isAutosaveRelation($name) {
@@ -43,7 +43,7 @@ trait AutosavesRelations {
     }
 
     protected static function addAutosavedRelation($names) {
-        $autosavedRelations = Arr::get(static::$autosavedRelations, static::class , []);
+        $autosavedRelations = Arr::get(static::$autosavedRelations, static::class, []);
 
         foreach ((array)$names as $name) {
             if (!method_exists(static::class, $name)) {

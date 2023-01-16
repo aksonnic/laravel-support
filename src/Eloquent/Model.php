@@ -15,7 +15,7 @@ class Model extends EloquentModel {
         Validation {
             AutosavesRelations::validateAutosavedRelations insteadof Validation;
             AutosavesRelations::validationRulesToIgnoreForParentRelations insteadof Validation;
-        }
+    }
 
     protected $guarded = [];
 

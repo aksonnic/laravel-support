@@ -14,7 +14,8 @@
     },
     "scripts": {
         "ut": "phpunit",
-        "cscompat-config": "phpcs --config-set installed_paths vendor/phpcompatibility/php-compatibility",
+        "csf": "phpcs --standard=style --report-width=80 --colors --basepath=. -s src tests",
+        "cscompat-config": "phpcs --config-set installed_paths devops/style,vendor/phpcompatibility/php-compatibility",
         "cscompat56": "phpcs --standard=PHPCompatibility --colors --runtime-set testVersion 5.6- --ignore=*.blade.php src tests"
     }
 }

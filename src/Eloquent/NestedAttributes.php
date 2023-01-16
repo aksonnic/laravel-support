@@ -10,7 +10,7 @@ trait NestedAttributes {
     protected static $acceptsNestedAttributesFor = [];
 
     public static function getNestedAttributes() {
-        return array_keys(Arr::get(static::$acceptsNestedAttributesFor, static::class , []));
+        return array_keys(Arr::get(static::$acceptsNestedAttributesFor, static::class, []));
     }
 
     public function isNestedAttribute($name) {
@@ -29,7 +29,7 @@ trait NestedAttributes {
     }
 
     protected static function addNestedAttribute($names, $opts = []) {
-        $nestedAttributes = Arr::get(static::$acceptsNestedAttributesFor, static::class , []);
+        $nestedAttributes = Arr::get(static::$acceptsNestedAttributesFor, static::class, []);
 
         foreach ((array)$names as $name) {
             if (!method_exists(static::class, $name)) {
@@ -69,11 +69,11 @@ trait NestedAttributes {
         $relation = $this->{$relationName}();
         $options = $this->getOptionsForNestedAttributes($relationName);
 
-        if (
-            (Arr::get($options, 'update_only') || Arr::get($attrs, 'id'))
-            && $existingRecord
-            && (Arr::get($options, 'update_only') || Arr::get($attrs, 'id') == $existingRecord->getKey())
-        ) {
+        $updateOnlyOrId = Arr::get($options, 'update_only') || Arr::get($attrs, 'id');
+        $updateOnlyOrMatchingId = Arr::get($options, 'update_only')
+            || Arr::get($attrs, 'id') == $existingRecord->getKey();
+
+        if ($updateOnlyOrId && $existingRecord && $updateOnlyOrMatchingId) {
             $this->assignOrMarkForDestruction($existingRecord, $attrs, $options);
             $existingRecord->setAttribute($relation->getForeignKeyName(), $relation->getParentKey());
         } elseif (Arr::get($attrs, 'id')) {
@@ -96,11 +96,11 @@ trait NestedAttributes {
         $relation = $this->{$relationName}();
         $options = $this->getOptionsForNestedAttributes($relationName);
 
-        if (
-            (Arr::get($options, 'update_only') || Arr::get($attrs, 'id'))
-            && $existingRecord
-            && (Arr::get($options, 'update_only') || Arr::get($attrs, 'id') == $existingRecord->getKey())
-        ) {
+        $updateOnlyOrId = Arr::get($options, 'update_only') || Arr::get($attrs, 'id');
+        $updateOnlyOrMatchingId = Arr::get($options, 'update_only')
+            || Arr::get($attrs, 'id') == $existingRecord->getKey();
+
+        if ($updateOnlyOrId && $existingRecord && $updateOnlyOrMatchingId) {
             $this->assignOrMarkForDestruction($existingRecord, $attrs, $options);
             if ($existingRecord->isMarkedForDestruction()) {
                 $foreignKey = $relation->getForeignKey();

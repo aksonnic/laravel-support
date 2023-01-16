@@ -45,7 +45,6 @@ trait TransactionalAwareEvents {
                 foreach (Arr::get($queuedEvents, $eventName, []) as $model) {
                     $model->fireModelEvent(static::transactionalEventNameFor('commit', $eventName));
                 }
-
             }
 
             self::$queuedTransactionalEvents[$event->connectionName] = [];
@@ -62,7 +61,6 @@ trait TransactionalAwareEvents {
                 foreach (Arr::get($queuedEvents, $eventName, []) as $model) {
                     $model->fireModelEvent(static::transactionalEventNameFor('rollback', $eventName));
                 }
-
             }
 
             self::$queuedTransactionalEvents[$event->connectionName] = [];

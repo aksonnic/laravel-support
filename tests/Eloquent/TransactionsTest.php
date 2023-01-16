@@ -43,7 +43,8 @@ class TransactionsTest extends DatabaseTestCase {
                 $comment->save();
                 throw new Exception('nope');
             });
-        } catch (Exception $ex) {}
+        } catch (Exception $ex) {
+        }
 
         $this->assertTrue($called);
     }
@@ -63,7 +64,8 @@ class TransactionsTest extends DatabaseTestCase {
             $this->getConnection()->transaction(function () use ($comment) {
                 $comment->update(['content' => null]);
             });
-        } catch (Exception $ex) {}
+        } catch (Exception $ex) {
+        }
 
         $this->assertEquals(null, $comment->content);
         $this->assertEquals('Existing', $comment->fresh()->content);
@@ -78,7 +80,8 @@ class TransactionsTest extends DatabaseTestCase {
                 $comment->update(['content' => 'New content']);
                 throw new Exception('nope');
             });
-        } catch (Exception $ex) {}
+        } catch (Exception $ex) {
+        }
 
         $this->assertCount(1, $comment->getDirty());
     }
@@ -92,7 +95,8 @@ class TransactionsTest extends DatabaseTestCase {
                 $comment->update(['content' => 'More new content']);
                 throw new Exception('nope');
             });
-        } catch (Exception $ex) {}
+        } catch (Exception $ex) {
+        }
 
         $this->assertCount(1, $comment->getDirty());
         $this->assertEquals('Existing', $comment->getOriginal('content'));
@@ -107,7 +111,8 @@ class TransactionsTest extends DatabaseTestCase {
                 $comment->update(['content' => 'New content']);
                 throw new Exception('nope');
             });
-        } catch (Exception $ex) {}
+        } catch (Exception $ex) {
+        }
 
         $comment->update(['content' => 'Retried content']);
 
@@ -123,7 +128,8 @@ class TransactionsTest extends DatabaseTestCase {
                 $comment->save();
                 throw new Exception('nope');
             });
-        } catch (Exception $ex) {}
+        } catch (Exception $ex) {
+        }
 
         $this->assertNull($comment->id);
         $this->assertFalse($comment->exists);
@@ -138,7 +144,8 @@ class TransactionsTest extends DatabaseTestCase {
                 $comment->delete();
                 throw new Exception('nope');
             });
-        } catch (Exception $ex) {}
+        } catch (Exception $ex) {
+        }
 
         $this->assertNotNull($comment->id);
         $this->assertTrue($comment->exists);
@@ -151,7 +158,8 @@ class TransactionsTest extends DatabaseTestCase {
             $this->getConnection()->transaction(function () use ($comment) {
                 $comment->update(['content' => 'New content']);
             });
-        } catch (Exception $ex) {}
+        } catch (Exception $ex) {
+        }
 
         $this->assertCount(0, $comment->getDirty());
         $this->assertEquals($comment->content, $comment->fresh()->content);
@@ -170,7 +178,8 @@ class TransactionsTest extends DatabaseTestCase {
             $this->getConnection()->transaction(function () use ($comment) {
                 $comment->save();
             });
-        } catch (Exception $ex) {}
+        } catch (Exception $ex) {
+        }
 
         $this->assertNull($comment->id);
         $this->assertFalse($comment->exists);
@@ -191,7 +200,8 @@ class TransactionsTest extends DatabaseTestCase {
                 // does this need to be saveOrFail()?
                 $comment->saveOrFail();
             });
-        } catch (Exception $ex) {}
+        } catch (Exception $ex) {
+        }
 
         $this->assertNull($comment->id);
         $this->assertFalse($comment->exists);
@@ -236,7 +246,8 @@ class TransactionsTest extends DatabaseTestCase {
 
         try {
             $ret = $user->saveOrFail();
-        } catch (Exception $ex) {}
+        } catch (Exception $ex) {
+        }
 
         $this->assertEquals(1, $user->fresh()->comments()->count());
     }
@@ -296,7 +307,8 @@ class TransactionsTest extends DatabaseTestCase {
                 $comment->delete();
                 throw new Exception("fail");
             });
-        } catch (Exception $ex) {}
+        } catch (Exception $ex) {
+        }
 
         $this->assertTrue($comment->wasRecentlyCreated);
         $this->assertTrue($comment->exists);
@@ -320,7 +332,8 @@ class TransactionsTest extends DatabaseTestCase {
 
                 throw new Exception('fail');
             });
-        } catch (Exception $ex) {}
+        } catch (Exception $ex) {
+        }
 
         $this->assertFalse($comment1->exists);
         $this->assertNull($comment1->id);
@@ -338,7 +351,8 @@ class TransactionsTest extends DatabaseTestCase {
                 $comment->saveOrFail();
                 throw new Exception('fail');
             });
-        } catch (Exception $ex) {}
+        } catch (Exception $ex) {
+        }
 
         $this->assertFalse($comment->exists);
     }
@@ -355,7 +369,8 @@ class TransactionsTest extends DatabaseTestCase {
                 $comment->saveOrFail();
                 throw new Exception("fail");
             });
-        } catch (Exception $ex) {}
+        } catch (Exception $ex) {
+        }
 
         $this->assertTrue($comment->wasRecentlyCreated);
         $this->assertTrue($comment->exists);
@@ -370,7 +385,8 @@ class TransactionsTest extends DatabaseTestCase {
                 $comment->saveOrFail();
                 throw new Exception("fail");
             });
-        } catch (Exception $ex) {}
+        } catch (Exception $ex) {
+        }
 
         $this->assertNull($comment->id);
     }
@@ -383,7 +399,8 @@ class TransactionsTest extends DatabaseTestCase {
                 $movie->saveOrFail();
                 throw new Exception("fail");
             });
-        } catch (Exception $ex) {}
+        } catch (Exception $ex) {
+        }
 
         $this->assertNull($movie->movieid);
     }
