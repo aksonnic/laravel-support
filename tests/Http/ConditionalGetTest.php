@@ -7,7 +7,7 @@ require_once __DIR__ . '/ControllerTestCase.php';
 
 class ConditionalGetTest extends ControllerTestCase {
 
-    public function setUp() {
+    public function setUp(): void {
         parent::setUp();
 
         $this->lastModified = Carbon::now()->startOfDay()->toRfc7231String();
