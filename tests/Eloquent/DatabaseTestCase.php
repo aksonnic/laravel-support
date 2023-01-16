@@ -8,7 +8,7 @@ class DatabaseTestCase extends TestCase {
 
     protected $queries;
 
-    public function setUp() {
+    public function setUp(): void {
         parent::setUp();
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
 

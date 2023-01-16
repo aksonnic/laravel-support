@@ -7,7 +7,7 @@ require_once __DIR__ . '/../models/Post/TrackBack.php';
 
 class NameTest extends TestCase {
 
-    public function setUp() {
+    public function setUp(): void {
         parent::setUp();
         $this->name = new Name(App\Models\Post\TrackBack::class);
     }

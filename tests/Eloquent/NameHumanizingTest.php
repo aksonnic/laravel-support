@@ -10,7 +10,7 @@ require_once __DIR__ . '/../models/package/Warehouse.php';
 
 class NameHumanizingTest extends TestCase {
 
-    public function setUp() {
+    public function setUp(): void {
         parent::setUp();
         $this->name = new Name(Post::class);
     }

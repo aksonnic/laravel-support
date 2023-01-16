@@ -10,7 +10,7 @@ require_once __DIR__ . '/TestsNestedAttributesOnACollection.php';
 class NestedAttributesHasManyTest extends DatabaseTestCase {
     use TestsNestedAttributesOnACollection;
 
-    public function setUp() {
+    public function setUp(): void {
         parent::setUp();
 
         $this->type = 'HasMany';

@@ -27,7 +27,7 @@ class ValidationTest extends TestCase {
         $this->assertFalse($reply->isValid());
         $this->assertCount(1, $reply->errors);
         $this->assertTrue($reply->errors->has('content'));
-        $this->assertContains('is required', $reply->errors->first('content'));
+        $this->assertStringContainsString('is required', $reply->errors->first('content'));
     }
 
     public function assertDoubleAttributeValidation() {
@@ -36,9 +36,9 @@ class ValidationTest extends TestCase {
         $this->assertFalse($reply->isValid());
         $this->assertCount(2, $reply->errors);
         $this->assertTrue($reply->errors->has('title'));
-        $this->assertContains('is required', $reply->errors->first('title'));
+        $this->assertStringContainsString('is required', $reply->errors->first('title'));
         $this->assertTrue($reply->errors->has('content'));
-        $this->assertContains('is required', $reply->errors->first('content'));
+        $this->assertStringContainsString('is required', $reply->errors->first('content'));
     }
 
     public function testErrorsClearAfterRecheck() {
@@ -63,7 +63,7 @@ class ValidationTest extends TestCase {
         $this->assertFalse($comment->isValid());
         $this->assertCount(1, $comment->errors);
         $this->assertTrue($comment->errors->has('content'));
-        $this->assertContains('comment body', $comment->errors->first('content'));
+        $this->assertStringContainsString('comment body', $comment->errors->first('content'));
     }
 
     public function testMethodCallingRule() {

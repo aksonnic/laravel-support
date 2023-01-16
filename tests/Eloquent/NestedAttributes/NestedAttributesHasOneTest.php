@@ -12,7 +12,7 @@ require_once __DIR__ . '/../../models/TestModels.php';
 
 class NestedAttributesHasOneTest extends DatabaseTestCase {
 
-    public function setUp() {
+    public function setUp(): void {
         parent::setUp();
 
         $this->eye = Eye::createOrFail(['side' => 'left'])->fresh();

@@ -7,7 +7,7 @@ require_once __DIR__ . '/../models/Blog/Post.php';
 
 class NameWithRelativeNamespaceTest extends TestCase {
 
-    public function setUp() {
+    public function setUp(): void {
         parent::setUp();
         $this->name = App\Models\Blog\Post::modelName();
     }
