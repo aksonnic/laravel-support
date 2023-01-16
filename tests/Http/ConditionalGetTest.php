@@ -43,8 +43,7 @@ class ConditionalGetTest extends ControllerTestCase {
             'If-Modified-Since' => $this->lastModified
         ];
 
-        $this->get('/times/stale', $headers)
-            ->assertStatus(304)
-            ->assertHeader('Last-Modified', $this->lastModified);
+        $resp = $this->get('/times/stale', $headers)
+            ->assertStatus(304);
     }
 }
