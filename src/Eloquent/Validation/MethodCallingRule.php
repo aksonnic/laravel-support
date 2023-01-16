@@ -5,7 +5,6 @@ namespace SilvertipSoftware\LaravelSupport\Eloquent\Validation;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Str;
 
-// only later Laravel
 class MethodCallingRule implements Rule {
 
     public function __construct($model, $tag, $params) {

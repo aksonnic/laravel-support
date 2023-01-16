@@ -53,7 +53,7 @@ trait Validation {
         $this->fireModelEvent('validated');
 
         if (!$this->errors->isEmpty()) {
-            throw $this->validationExceptionWithMessages($this->errors->getMessages());
+            throw ValidationException::withMessages($this->errors->getMessages());
         }
 
         return $ret;
@@ -127,35 +127,7 @@ trait Validation {
     private function buildMethodCallingRule($paramStr) {
         $params = explode(',', $paramStr);
         $tag = array_shift($params);
-        // new MethodCallingRule($this, $tag, $params);
 
-        // return $rule;
-        $className = method_exists(static::class, 'modelName')
-            ? static::modelName()->singular
-            : str_replace('\\', '', get_called_class());
-        $name = $className . '.' . $tag;
-        $methodName = 'validate' . Str::studly($tag);
-
-        Validator::extend(
-            $name,
-            function ($attribute, $value, $parameters, $validator) use ($params, $methodName) {
-                return $validator->callModelMethod($methodName, $attribute, $value, $params);
-            }
-        );
-
-        return $name;
-    }
-
-    // helper for old Laravel
-    private function validationExceptionWithMessages($messages) {
-        return new ValidationException(
-            tap(Validator::make([], []), function ($validator) use ($messages) {
-                foreach ($messages as $key => $value) {
-                    foreach (Arr::wrap($value) as $message) {
-                        $validator->errors()->add($key, $message);
-                    }
-                }
-            })
-        );
+        return new MethodCallingRule($this, $tag, $params);
     }
 }
