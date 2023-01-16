@@ -20,8 +20,7 @@ class FluentModel extends Fluent {
         return parent::get($key, $default);
     }
 
-    // older Laravel
-    public function __set($key, $value) {
+    public function offsetSet($key, $value) {
         $method = 'set' . Str::studly($key) . 'Attribute';
 
         if (method_exists($this, $method)) {

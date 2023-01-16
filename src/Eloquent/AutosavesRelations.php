@@ -142,7 +142,7 @@ trait AutosavesRelations {
                     case 'MorphTo':
                         $ret = $model->saveOrFail($options);
                         if ($ret && $model->exists) {
-                            $foreignKey = $relation->getForeignKey();
+                            $foreignKey = $relation->getForeignKeyName();
                             $this->{$foreignKey} = $model->getKey();
                             if ($relationType == 'MorphTo') {
                                 $this->{$relation->getMorphType()} = $model->getMorphClass();
@@ -287,7 +287,7 @@ trait AutosavesRelations {
                             $ignored = [$inverseRelation->getForeignKeyName(), $inverseRelation->getMorphType()];
                             break;
                         case 'BelongsTo':
-                            $ignored = [$inverseRelation->getForeignKey()];
+                            $ignored = [$inverseRelation->getForeignKeyName()];
                             break;
                         default:
                             throw new RuntimeException(

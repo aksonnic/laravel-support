@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
 
 class Model extends EloquentModel {
     use AutosavesRelations,
-        HasTraits,
         Naming,
         NestedAttributes,
         TransactionalAwareEvents,
@@ -18,13 +17,6 @@ class Model extends EloquentModel {
     }
 
     protected $guarded = [];
-
-    public function __construct($attributes = []) {
-        $this->bootIfNotBooted();
-        $this->initializeTraits();
-        $this->syncOriginal();
-        $this->fill($attributes);
-    }
 
     protected function processRollback() {
         $this->rollbackSelfAndAutosavedRelations();

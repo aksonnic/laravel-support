@@ -62,7 +62,7 @@ class Name extends Fluent {
 
         if (Lang::has($fullKey)) {
             if (Arr::has($opts, 'count')) {
-                return Lang::transChoice($fullKey, Arr::get($opts, 'count'), $opts, $locale);
+                return Lang::choice($fullKey, Arr::get($opts, 'count'), $opts, $locale);
             }
 
             return Lang::get($fullKey, $opts, $locale);

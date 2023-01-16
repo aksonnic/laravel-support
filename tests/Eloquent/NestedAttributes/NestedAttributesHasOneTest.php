@@ -67,7 +67,7 @@ class NestedAttributesHasOneTest extends DatabaseTestCase {
     }
 
     public function testThrowsIfIdGivenButNoRecord() {
-        $this->setExpectedException(RuntimeException::class);
+        $this->expectException(RuntimeException::class);
 
         $this->eye->iris_attributes = ['id' => 1234567890];
     }

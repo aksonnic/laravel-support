@@ -19,7 +19,7 @@ class NestedAttributesTest extends DatabaseTestCase {
     }
 
     public function testRelationNeedsToExist() {
-        $this->setExpectedException(RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $model = new InvalidNestedAttrModel();
     }
 }

@@ -103,7 +103,7 @@ trait NestedAttributes {
         if ($updateOnlyOrId && $existingRecord && $updateOnlyOrMatchingId) {
             $this->assignOrMarkForDestruction($existingRecord, $attrs, $options);
             if ($existingRecord->isMarkedForDestruction()) {
-                $foreignKey = $relation->getForeignKey();
+                $foreignKey = $relation->getForeignKeyName();
                 $this->{$foreignKey} = null;
             }
         } elseif (Arr::get($attrs, 'id')) {
@@ -113,7 +113,7 @@ trait NestedAttributes {
 
             if ($existingRecord && !$existingRecord->exists) {
                 $existingRecord->fill($fillableAttributes);
-                $foreignKey = $relation->getForeignKey();
+                $foreignKey = $relation->getForeignKeyName();
                 $this->{$foreignKey} = null;
             } elseif (!Arr::get($attrs, '_destroy') | !Arr::get($options, 'allow_destroy')) {
                 $newRecord = $relation->make($fillableAttributes);
