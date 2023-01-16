@@ -71,7 +71,7 @@ trait NestedAttributes {
 
         $updateOnlyOrId = Arr::get($options, 'update_only') || Arr::get($attrs, 'id');
         $updateOnlyOrMatchingId = Arr::get($options, 'update_only')
-            || Arr::get($attrs, 'id') == $existingRecord->getKey();
+            || ($existingRecord && (Arr::get($attrs, 'id') == $existingRecord->getKey()));
 
         if ($updateOnlyOrId && $existingRecord && $updateOnlyOrMatchingId) {
             $this->assignOrMarkForDestruction($existingRecord, $attrs, $options);
@@ -98,7 +98,7 @@ trait NestedAttributes {
 
         $updateOnlyOrId = Arr::get($options, 'update_only') || Arr::get($attrs, 'id');
         $updateOnlyOrMatchingId = Arr::get($options, 'update_only')
-            || Arr::get($attrs, 'id') == $existingRecord->getKey();
+            || ($existingRecord && (Arr::get($attrs, 'id') == $existingRecord->getKey()));
 
         if ($updateOnlyOrId && $existingRecord && $updateOnlyOrMatchingId) {
             $this->assignOrMarkForDestruction($existingRecord, $attrs, $options);
