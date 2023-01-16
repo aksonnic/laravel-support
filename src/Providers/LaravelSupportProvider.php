@@ -11,6 +11,7 @@ use SilvertipSoftware\LaravelSupport\Http\Middleware\SealInFreshness;
 use SilvertipSoftware\LaravelSupport\Http\Mixins\RequestAcceptsHelpers;
 use SilvertipSoftware\LaravelSupport\Http\Mixins\RequestFreshnessHelpers;
 use SilvertipSoftware\LaravelSupport\Routing\ResourceRegistrar;
+use SilvertipSoftware\LaravelSupport\Routing\RedirectHelpers;
 use SilvertipSoftware\LaravelSupport\Routing\UrlHelpers;
 
 class LaravelSupportProvider extends ServiceProvider {
@@ -19,6 +20,7 @@ class LaravelSupportProvider extends ServiceProvider {
         RequestAcceptsHelpers::register();
         RequestFreshnessHelpers::register();
         UrlHelpers::register();
+        RedirectHelpers::register();
 
         $this->app->singleton('Illuminate\Routing\ResourceRegistrar', function ($app) {
             return new ResourceRegistrar($app['router']);
