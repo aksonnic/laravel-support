@@ -30,6 +30,6 @@ class ModelValidator extends Validator {
             return $this->model->humanAttributeName($name);
         }
 
-        return Arr::get($this->translator->trans('validation.attributes'), $name);
+        return Arr::get($this->translator->get('validation.attributes'), $name);
     }
 }

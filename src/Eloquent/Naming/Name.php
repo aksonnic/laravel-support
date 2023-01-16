@@ -63,7 +63,7 @@ class Name extends Fluent {
                 return Lang::transChoice($fullKey, Arr::get($opts, 'count'), $opts, $locale);
             }
 
-            return Lang::trans($fullKey, $opts, $locale);
+            return Lang::get($fullKey, $opts, $locale);
         }
 
         return $this->attributes['human'];

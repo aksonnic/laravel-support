@@ -24,10 +24,10 @@ trait Translation {
         foreach ($possibleKeys as $key) {
             if (Lang::has($key, $locale)) {
                 if ($count) {
-                    return Lang::transChoice($key, $count, $opts, $locale);
+                    return Lang::choice($key, $count, $opts, $locale);
                 }
 
-                return Lang::trans($key, $opts, $locale);
+                return Lang::get($key, $opts, $locale);
             }
         }
 
