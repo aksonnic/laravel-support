@@ -15,8 +15,8 @@ class NestedAttributesBelongsToTest extends DatabaseTestCase {
     public function setUp() {
         parent::setUp();
 
-        $this->eye = Eye::create(['side' => 'left'])->fresh();
-        $this->retina = Retina::create(['status' => 'attached', 'eye_id' => $this->eye->id]);
+        $this->eye = Eye::createOrFail(['side' => 'left'])->fresh();
+        $this->retina = Retina::createOrFail(['status' => 'attached', 'eye_id' => $this->eye->id]);
         $this->eye = $this->retina->eye;
     }
 
@@ -103,8 +103,7 @@ class NestedAttributesBelongsToTest extends DatabaseTestCase {
 
         $this->assertNull(Eye::find($originalEyeId));
         $this->assertNull($this->retina->eye_id);
-        $this->fail('TBD this test');
-        $this->assertNull($this->retina->eye, "TBD: cleanup autosaved relations after commit?");
+        $this->assertNull($this->retina->eye);
     }
 
     public function testDoesNotDestroyRecordWhenDestroyIsFalsey() {

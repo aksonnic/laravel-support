@@ -15,8 +15,8 @@ class NestedAttributesHasOneTest extends DatabaseTestCase {
     public function setUp() {
         parent::setUp();
 
-        $this->eye = Eye::create(['side' => 'left'])->fresh();
-        Iris::create(['color' => 'honey', 'eye_id' => $this->eye->id]);
+        $this->eye = Eye::createOrFail(['side' => 'left'])->fresh();
+        Iris::createOrFail(['color' => 'honey', 'eye_id' => $this->eye->id]);
 
         $this->iris = $this->eye->iris;
     }

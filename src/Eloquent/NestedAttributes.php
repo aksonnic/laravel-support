@@ -142,8 +142,10 @@ trait NestedAttributes {
 
         foreach ($attrsArray as $attrs) {
             if (empty($attrs['id'])) {
-                $newRecord = $relation->make(Arr::except($attrs, $this->getUnassignableKeys()));
-                $existingRecords[] = $newRecord;
+                if (!Arr::get($attrs, '_destroy')) {
+                    $newRecord = $relation->make(Arr::except($attrs, $this->getUnassignableKeys()));
+                    $existingRecords[] = $newRecord;
+                }
             } else {
                 $existingRecord = Arr::first($existingRecords, function ($model) use ($attrs) {
                     return $model->getKey() == $attrs['id'];

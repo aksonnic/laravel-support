@@ -66,6 +66,17 @@ class Base extends Migration {
             });
         }
 
+        if (!Schema::hasTable('cones')) {
+            Schema::create('cones', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('color');
+                $table->integer('eye_id')
+                    ->unsigned();
+                $table->foreign('eye_id')
+                    ->references('id')->on('eyes');
+            });
+        }
+
         if (!Schema::hasTable('irises')) {
             Schema::create('irises', function (Blueprint $table) {
                 $table->increments('id');

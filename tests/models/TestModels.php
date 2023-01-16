@@ -40,11 +40,19 @@ class Company extends Model {
     }
 }
 
+class Cone extends Model {
+    public $timestamps = false;
+}
+
 class Eye extends Model {
 
     public $timestamps = false;
 
     public $createdFlagStack = [];
+
+    public function cones() {
+        return $this->hasMany(Cone::class);
+    }
 
     public function iris() {
         return $this->hasOne(Iris::class);
@@ -78,6 +86,7 @@ class Eye extends Model {
         static::addNestedAttribute('permanent_iris', ['allow_destroy' => false]);
         static::addNestedAttribute('update_only_iris', ['update_only' => true]);
         static::addNestedAttribute('update_and_destroy_iris', ['update_only' => true, 'allow_destroy' => true]);
+        static::addNestedAttribute('cones', ['allow_destroy' => true]);
 
         Eye::created(function($eye) {
             $eye->createdFlagStack[] = $eye->iris

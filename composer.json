@@ -13,7 +13,8 @@
         "phpcompatibility/php-compatibility": "9.2.0"
     },
     "scripts": {
+        "ut": "phpunit",
         "cscompat-config": "phpcs --config-set installed_paths vendor/phpcompatibility/php-compatibility",
-        "cscompat56": "phpcs --standard=PHPCompatibility --colors -v --runtime-set testVersion 5.6- src tests"
+        "cscompat56": "phpcs --standard=PHPCompatibility --colors --runtime-set testVersion 5.6- --ignore=*.blade.php src tests"
     }
 }

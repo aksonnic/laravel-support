@@ -8,6 +8,12 @@ use Illuminate\Support\Arr;
 
 trait Transactions {
 
+    public static function createOrFail(array $attributes = []) {
+        return tap(static::newModelInstance($attributes), function ($instance) {
+            $instance->saveOrFail();
+        });
+    }
+
     public function delete() {
         $ret = false;
 

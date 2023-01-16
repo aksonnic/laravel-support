@@ -57,6 +57,12 @@ trait AutosavesRelations {
         static::$autosavedRelations[static::class] = $autosavedRelations;
     }
 
+    protected static function bootAutosavesRelations() {
+        static::registerModelEvent('afterCommit', function ($model) {
+            $model->syncAutosavedRelations();
+        });
+    }
+
     protected function getAutosaveOptionsFor($relationName) {
         return static::$autosavedRelations[static::class][$relationName];
     }
@@ -127,8 +133,9 @@ trait AutosavesRelations {
                     case 'HasOne':
                     case 'HasMany':
                     case 'MorphOne':
-                        $inverseName = $this->getInverseRelationNameFor($relationName);
-                        $model->{$inverseName}()->associate($this);
+                        // $inverseName = $this->getInverseRelationNameFor($relationName);
+                        // $model->{$inverseName}()->associate($this);
+                        $model->setAttribute($relation->getForeignKeyName(), $relation->getParentKey());
                         $ret = $model->saveOrFail($options);
                         break;
                     case 'BelongsTo':
@@ -187,6 +194,21 @@ trait AutosavesRelations {
         }
 
         return true;
+    }
+
+    protected function syncAutosavedRelations() {
+        $loadedRelations = $this->loadedAutosavedRelations();
+        foreach ($loadedRelations as $relationName => $value) {
+            if ($value instanceof Collection) {
+                $stillExisting = $value->filter(function ($child) {
+                    return !$child->isMarkedForDestruction();
+                });
+
+                $this->setRelation($relationName, $stillExisting);
+            } elseif (method_exists($value, 'isMarkedForDestruction') && $value->isMarkedForDestruction()) {
+                $this->setRelation($relationName, null);
+            }
+        }
     }
 
     protected function validateAutosavedRelations() {
@@ -257,21 +279,23 @@ trait AutosavesRelations {
                 break;
             default:
                 $inverseName = $this->getInverseRelationNameFor($relationName);
-                $inverseRelation = $model->{$inverseName}();
-                $inverseRelationType = class_basename(get_class($inverseRelation));
-                switch ($inverseRelationType) {
-                    case 'MorphTo':
-                        $ignored = [$inverseRelation->getForeignKeyName(), $inverseRelation->getMorphType()];
-                        break;
-                    case 'BelongsTo':
-                        $ignored = [$inverseRelation->getForeignKey()];
-                        break;
-                    default:
-                        throw new RuntimeException(
-                            'Nested validation for ' . $inverseRelationType
-                            . ' (inverse) relations not supported.'
-                        );
-                        break;
+                if (method_exists($model, $inverseName)) {
+                    $inverseRelation = $model->{$inverseName}();
+                    $inverseRelationType = class_basename(get_class($inverseRelation));
+                    switch ($inverseRelationType) {
+                        case 'MorphTo':
+                            $ignored = [$inverseRelation->getForeignKeyName(), $inverseRelation->getMorphType()];
+                            break;
+                        case 'BelongsTo':
+                            $ignored = [$inverseRelation->getForeignKey()];
+                            break;
+                        default:
+                            throw new RuntimeException(
+                                'Nested validation for ' . $inverseRelationType
+                                . ' (inverse) relations not supported.'
+                            );
+                            break;
+                    }
                 }
                 break;
         }
