@@ -9,5 +9,6 @@ class Controller extends BaseController {
         Concerns\ConditionalGet,
         Concerns\EasierMiddleware,
         Concerns\Resourceful,
+        Concerns\Routing,
         Concerns\StrongParameters;
 }
