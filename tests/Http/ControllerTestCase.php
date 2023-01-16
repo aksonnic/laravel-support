@@ -10,7 +10,7 @@ require_once __DIR__ . '/../controllers/SubNamespaceControllers.php';
 
 class ControllerTestCase extends TestCase {
 
-    public function setUp() {
+    public function setUp(): void {
         parent::setUp();
 
         View::addLocation(__DIR__ . '/../views');

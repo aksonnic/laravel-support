@@ -18,16 +18,16 @@ class AutoRespondsTest extends ControllerTestCase {
         $response = $this->get('/eyes', $this->acceptJavascriptHeaders())
             ->assertSuccessful();
 
-        $this->assertContains('(function', $response->getContent());
-        $this->assertContains('eyes.js.index', $response->getContent());
+        $this->assertStringContainsString('(function', $response->getContent());
+        $this->assertStringContainsString('eyes.js.index', $response->getContent());
     }
 
     public function testHtmlResponseUsesCorrectViewForStream() {
         $response = $this->get('/eyes', $this->acceptStreamHeaders())
             ->assertSuccessful();
 
-        $this->assertContains('<turbo-stream', $response->getContent());
-        $this->assertContains('eyes.stream.index', $response->getContent());
+        $this->assertStringContainsString('<turbo-stream', $response->getContent());
+        $this->assertStringContainsString('eyes.stream.index', $response->getContent());
     }
 
     public function testHtmlResponseUsesCorrectViewInSubNamespace() {
@@ -55,7 +55,7 @@ class AutoRespondsTest extends ControllerTestCase {
 
             if ($format != 'html') {
                 $contentType = $response->headers->get('Content-Type');
-                $this->assertContains($headers['Accept'], $contentType);
+                $this->assertStringContainsString($headers['Accept'], $contentType);
             }
         }
     }
