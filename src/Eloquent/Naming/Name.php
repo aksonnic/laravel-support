@@ -25,10 +25,14 @@ class Name extends Fluent {
         $human = str_replace('_', ' ', ucfirst($element));
 
         $collection = $this->tableize($name);
+
+        // param_key is used in name/id of DOM elements. Standard is to separate with _
         $paramKey = $namespace
             ? Str::singular(str_replace('\\', '', Str::snake($unnamespaced)))
             : $singular;
         $i18nKey = str_replace('\\_', '.', Str::snake($name));
+
+        // route keys are used in named routes. Laravel standard is to separate with .
         $routeKey = $namespace
             ? Str::plural($paramKey)
             : $plural;

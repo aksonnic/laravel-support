@@ -1,6 +1,6 @@
 <?php
 
-namespace SilvertipSoftware\LaravelSupport\Routing\RestRouter;
+namespace SilvertipSoftware\LaravelSupport\Routing;
 
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -109,7 +109,7 @@ class RestRouter {
     }
 
     protected static function findRoute($prefix, $isCollection, $options) {
-        $defaultActions = $isCollection ? [null, 'index', 'store'] : ['show', 'update', 'destroy']
+        $defaultActions = $isCollection ? [null, 'index', 'store'] : ['show', 'update', 'destroy'];
         $actions = Arr::get($options, 'action', $defaultActions);
 
         $actions = (array)$actions;
@@ -125,7 +125,7 @@ class RestRouter {
     }
 
     protected static function prefixFromClass($class) {
-        return Str::plural(Str::snake(class_basename($class)));
+        return Str::plural(Str::kebab(class_basename($class)));
     }
 
     protected static function parameterNameFromClass($class) {
