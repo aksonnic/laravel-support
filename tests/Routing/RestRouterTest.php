@@ -21,7 +21,7 @@ class RestRouterTest extends ControllerTestCase {
             Route::resource('eyes', 'App\Http\Controllers\EyesController', ['as' => 'admin']);
         });
 
-        Route::resource('track-backs', 'App\Http\Controllers\EyesController');
+        Route::resource('track-backs', 'App\Http\Controllers\EyesController', ['only' => 'index']);
     }
 
     public function testSingleString() {
@@ -124,11 +124,17 @@ class RestRouterTest extends ControllerTestCase {
     }
 
     public function testNamespacedModelClass() {
-        collect(Route::getRoutes())->each(function ($r) {
-            echo($r->uri() . "\t\t" . $r->getName() . PHP_EOL);
-        });
         $path = RestRouter::path(TrackBack::class);
 
         $this->assertEquals('/track-backs', $path);
+    }
+
+    public function testNoDefinedRoute() {
+        $this->expectException(Exception::class);
+
+        $trackBack = new TrackBack(['id' => 1234]);
+        $trackBack->exists = true;
+
+        RestRouter::path($trackBack);
     }
 }
