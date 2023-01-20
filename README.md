@@ -32,3 +32,8 @@ the huge set of Rails functionality, but not strictly.
 ### AutoResponds
 
 ### Conditional Gets
+
+## Routing Support
+
+### REST-based URL generation
+

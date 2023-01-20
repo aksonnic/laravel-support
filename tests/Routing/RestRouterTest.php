@@ -112,6 +112,15 @@ class RestRouterTest extends ControllerTestCase {
         $this->assertEquals('/eyes/1234', $path);
     }
 
+    public function testSingleExistingModelWithDestroyAction() {
+        $eye = new Eye(['id' => 1234]);
+        $eye->exists = true;
+
+        $path = RestRouter::path($eye, ['action' => 'destroy']);
+
+        $this->assertEquals('/eyes/1234', $path);
+    }
+
     public function testPrefixedModel() {
         $eye = new Eye(['id' => 1234]);
         $eye->exists = true;
