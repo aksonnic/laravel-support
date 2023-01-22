@@ -53,7 +53,7 @@ trait Transactions {
     }
 
     abstract protected function processRollback();
-    abstract protected function processSave();
+    abstract protected function processSave($options);
 
     protected static function bootTransactions() {
         static::registerModelEvent('afterCommit', function ($model) {
