@@ -2,7 +2,9 @@
 
 namespace SilvertipSoftware\LaravelSupport\Http\Concerns;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 trait LoadsResource {
 
