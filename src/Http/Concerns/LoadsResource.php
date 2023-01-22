@@ -77,7 +77,7 @@ trait LoadsResource {
 
     protected function loadResource($name, $class = null) {
         $class = $class ?: $this->getSubjectResourceClass();
-        $this->{$name} = $class::findOrFail(request($this->routeParameterNameFor($name));
+        $this->{$name} = $class::findOrFail(request($this->routeParameterNameFor($name)));
 
         return $this->{$name};
     }
