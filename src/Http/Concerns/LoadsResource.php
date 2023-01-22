@@ -64,7 +64,7 @@ trait LoadsResource {
 
             $this->createCollectionQuery($modelName, $modelClass, !!$this->parentModel);
 
-            if ($ability != 'index') {
+            if ($action != 'index') {
                 $model = new $modelClass;
                 $this->{$modelName} = $model;
 
