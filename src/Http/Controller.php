@@ -8,7 +8,14 @@ class Controller extends BaseController {
     use Concerns\AutoResponds,
         Concerns\ConditionalGet,
         Concerns\EasierMiddleware,
+        Concerns\HasTraits,
         Concerns\Resourceful,
         Concerns\Routing,
         Concerns\StrongParameters;
+
+    public function __construct() {
+        parent::__construct();
+
+        $this->initializeTraits();
+    }
 }
