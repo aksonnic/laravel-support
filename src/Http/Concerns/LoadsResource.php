@@ -9,7 +9,7 @@ trait LoadsResource {
     protected $parentName = null;
     protected $parentModel = null;
 
-    public function initializeLoadResource() {
+    public function initializeLoadsResource() {
         if (isset($this->loadResource) && $this->loadResource == false) {
             return null;
         }
