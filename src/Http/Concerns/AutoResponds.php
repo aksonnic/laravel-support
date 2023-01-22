@@ -90,7 +90,7 @@ trait AutoResponds {
         $segmentNames = array_map(function ($part) {
             $fragment = str_replace('Controller', '', $part);
 
-            return strtolower(Str::snake(Str::plural($fragment)));
+            return strtolower(Str::snake($fragment));
         }, explode('\\', $controllerName));
 
         $leafSegments = array_map(function ($leaf) {
