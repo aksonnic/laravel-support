@@ -27,7 +27,7 @@ class LaravelSupportProvider extends ServiceProvider {
         Route::aliasMiddleware('formats', DetectDesiredResponseFormat::class);
         Route::aliasMiddleware('freshness', SealInFreshness::class);
 
-        View::composer(function ($view) {
+        View::composer('*', function ($view) {
             $view->with('currentView', $view->getName());
         });
     }
