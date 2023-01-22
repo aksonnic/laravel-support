@@ -14,8 +14,6 @@ class Controller extends BaseController {
         Concerns\StrongParameters;
 
     public function __construct() {
-        parent::__construct();
-
         $this->initializeTraits();
     }
 }
