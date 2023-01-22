@@ -4,6 +4,7 @@ namespace SilvertipSoftware\LaravelSupport\Providers;
 
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use SilvertipSoftware\LaravelSupport\Http\Middleware\DetectDesiredResponseFormat;
 use SilvertipSoftware\LaravelSupport\Http\Middleware\SealInFreshness;
@@ -25,5 +26,9 @@ class LaravelSupportProvider extends ServiceProvider {
 
         Route::aliasMiddleware('formats', DetectDesiredResponseFormat::class);
         Route::aliasMiddleware('freshness', SealInFreshness::class);
+
+        View::composer(function ($view) {
+            $view->with('currentView', $view->getName());
+        });
     }
 }
