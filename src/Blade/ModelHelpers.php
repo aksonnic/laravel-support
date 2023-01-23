@@ -2,6 +2,8 @@
 
 namespace SilvertipSoftware\LaravelSupport\Blade;
 
+use Illuminate\Support\Facades\Blade;
+
 class ModelHelpers {
 
     public static function registerDirectives() {
