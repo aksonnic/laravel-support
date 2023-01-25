@@ -125,6 +125,10 @@ class RestRouter {
     }
 
     protected static function prefixFromClass($class) {
+        if (method_exists($class, 'modelName')) {
+            return call_user_func([$class, 'modelName'])->route_key;
+        }
+
         return Str::plural(Str::kebab(class_basename($class)));
     }
 
