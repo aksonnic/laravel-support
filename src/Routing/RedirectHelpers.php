@@ -3,6 +3,7 @@
 namespace SilvertipSoftware\LaravelSupport\Routing;
 
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 
 class RedirectHelpers {
 
