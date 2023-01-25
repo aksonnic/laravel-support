@@ -33,7 +33,7 @@ class NameTest extends TestCase {
     }
 
     public function testRouteKey() {
-        $this->assertEquals('post_track_backs', $this->name->route_key);
+        $this->assertEquals('post.track-backs', $this->name->route_key);
     }
 
     public function testParamKey() {

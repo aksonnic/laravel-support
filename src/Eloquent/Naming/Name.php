@@ -33,12 +33,10 @@ class Name extends Fluent {
         $i18nKey = str_replace('\\_', '.', Str::snake($name));
 
         // route keys are used in named routes. Laravel standard is to separate with .
-        $routeKey = $namespace
-            ? Str::plural($paramKey)
-            : $plural;
+        $routeKey = Str::plural(str_replace('\\-', '.', Str::kebab($namespace ? $unnamespaced : $name)));
         $singularRouteKey = Str::singular($routeKey);
         $routeKey = $uncountable
-            ? $routeKey . '_index'
+            ? $routeKey . '.index'
             : $routeKey;
 
         parent::__construct([
