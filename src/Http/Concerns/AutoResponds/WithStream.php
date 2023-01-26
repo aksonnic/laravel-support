@@ -8,9 +8,18 @@ trait WithStream {
 
     protected function createStreamResponse($status = 200) {
         View::share(get_object_vars($this));
-        $content = view($this->viewNameForRoute())->render();
+        $streamView = $this->viewNameForRoute();
+        if (View::exists($streamView)) {
+            return $this->makeStreamResponseFrom(
+                response(view($streamView)->render(), $status)
+            );
+        } else {
+            $htmlView = $this->viewNameForRoute('html');
 
-        return $this->makeStreamResponseFrom(response($content, $status));
+            return $this->makeHtmlResponseFrom(
+                response(view($htmlView)->render(), $status)
+            );
+        }
     }
 
     protected function makeStreamResponseFrom($response) {
