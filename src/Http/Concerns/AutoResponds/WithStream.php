@@ -15,7 +15,7 @@ trait WithStream {
 
     protected function makeStreamResponseFrom($response) {
         return $response
-            ->header('Content-Type', 'application/vnd.turbo-stream.html');
+            ->header('Content-Type', 'text/vnd.turbo-stream.html');
     }
 
     protected function mapRedirectForStream($response) {
