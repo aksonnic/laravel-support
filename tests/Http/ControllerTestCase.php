@@ -44,7 +44,7 @@ class ControllerTestCase extends TestCase {
 
     protected function acceptStreamHeaders() {
         return [
-            'Accept' => 'application/vnd.turbo-stream.html'
+            'Accept' => 'text/vnd.turbo-stream.html'
         ];
     }
 }
