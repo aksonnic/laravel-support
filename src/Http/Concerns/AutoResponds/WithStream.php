@@ -19,6 +19,6 @@ trait WithStream {
     }
 
     protected function mapRedirectForStream($response) {
-        return $response;
+        return $this->makeHtmlResponseFrom($response);
     }
 }

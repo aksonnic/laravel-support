@@ -19,4 +19,9 @@ trait WithHtml {
 
         return view($viewName);
     }
+
+    protected function makeHtmlResponseFrom($response) {
+        return $response
+            ->header('Content-Type', 'text/html');
+    }
 }
