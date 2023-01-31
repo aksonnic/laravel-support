@@ -14,7 +14,7 @@ trait ConfigBound {
     }
 
     public static function findOrFail($key) {
-        $model = $this->find($key);
+        $model = static::find($key);
 
         if (!$model) {
             throw (new ModelNotFoundException)->setModel(static::class, $key);
