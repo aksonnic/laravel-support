@@ -2,6 +2,7 @@
 
 namespace SilvertipSoftware\LaravelSupport\Eloquent;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 
 trait ConfigBound {
@@ -10,6 +11,14 @@ trait ConfigBound {
 
     public static function find($key) {
         return Arr::get(static::allInstances(), $key);
+    }
+
+    public static function findOrFail($key) {
+        $model = $this->find($key);
+
+        if (!$model) {
+            throw (new ModelNotFoundException)->setModel(static::class, $key);
+        }
     }
 
     public static function exists($key) {
