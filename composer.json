@@ -1,5 +1,5 @@
 {
-    "name": "silvertipsoftware/laravel-support",
+    "name": "aksonnic/laravel-support",
     "type": "library",
     "license": "MIT",
     "autoload": {
